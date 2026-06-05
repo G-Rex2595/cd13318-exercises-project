@@ -6,6 +6,8 @@ def generate_response(openai_key: str, user_message: str, context: str,
     """Generate response using OpenAI with context"""
 
     # TODO: Define system prompt
+    system_prompt = """
+You are a a NASA Mission Expert."""
     # TODO: Set context in messages
     # TODO: Add chat history
     # TODO: Creaet OpenAI Client

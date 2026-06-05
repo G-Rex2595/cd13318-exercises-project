@@ -61,10 +61,39 @@ class ChromaEmbeddingPipelineTextOnly:
             chunk_overlap: Overlap between chunks
         """
         # TODO: Initialize OpenAI client
+        self.openAI_client = OpenAI(
+            base_url="https://openai.vocareum.com/v1",
+            api_key=openai_api_key  # Replace with your actual key
+        )
+
         # TODO: Store configuration parameters
+        self.collection_name = collection_name
+        self.embedding_model = embedding_model
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+
+        self.collection_config = {
+            "name": collection_name,
+            "metadata_fields": ["mission", "source"],
+            "description": "Text documents from NASA space missions."
+        }
+
         # TODO: Initialize ChromaDB client
+        # Initialize ChromaDB client with persistent storage
+        self.client = chromadb.PersistentClient(
+            path=chroma_persist_directory,
+            settings=Settings(
+                anonymized_telemetry=False,  # Disable telemetry for privacy
+                allow_reset=True             # Allow database reset for development
+            )
+        )
         # TODO: Create or get collection
-    
+        self.collection = self.client.create_collection(
+                    name=self.collection_name,
+                    embedding_function=OpenAIEmbeddingFunction,
+                    metadata={"description": self.collection_config["description"]}
+                )
+
     def chunk_text(self, text: str, metadata: Dict[str, Any]) -> List[Tuple[str, Dict[str, Any]]]:
         """
         Split text into chunks with metadata
@@ -77,10 +106,35 @@ class ChromaEmbeddingPipelineTextOnly:
             List of (chunk_text, chunk_metadata) tuples
         """
         # TODO: Handle short texts that don't need chunking
+        if len(text) <= self.chunk_size:
+            return [(text, metadata)]
+        
         # TODO: Implement chunking logic with overlap
+        chunks = []
+        chunk_index = 0
+        remaining_text = text
+        while len(remaining_text) > self.chunk_size:
+            chunks[chunk_index] = remaining_text[:self.chunk_size]
+            remaining_text = remaining_text[self.chunk_size - self.chunk_overlap:]
+            chunk_index += 1
+        if remaining_text:
+            chunks[chunk_index] = remaining_text
+        
         # TODO: Try to break at sentence boundaries
+        for chunk, index in chunks:
+            if index < len(chunks) - 1:
+                last_period = chunk.rfind('.')
+                if last_period != -1 and last_period > self.chunk_size - self.chunk_overlap:
+                    chunk = chunk[:last_period + 1]
+
         # TODO: Create metadata for each chunk
-        pass
+        for chunk, index in chunks:
+            chunk_metadata = metadata.copy()
+            chunk_metadata['chunk_index'] = index
+            chunk_metadata['chunk_size'] = len(chunk)
+            chunks[index] = (chunk, chunk_metadata)
+        
+        return chunks
     
     def check_document_exists(self, doc_id: str) -> bool:
         """
@@ -93,8 +147,9 @@ class ChromaEmbeddingPipelineTextOnly:
             True if document exists, False otherwise
         """
         # TODO: Query collection for document ID
+        result = self.collection.get(ids=[doc_id])
         # TODO: Return True if exists, False otherwise
-        pass
+        return len(result['ids']) > 0
     
     def update_document(self, doc_id: str, text: str, metadata: Dict[str, Any]) -> bool:
         """
@@ -197,10 +252,19 @@ class ChromaEmbeddingPipelineTextOnly:
         Returns:
             Embedding vector
         """
-        # TODO: Call OpenAI embeddings API
-        # TODO: Return embedding vector
+        try:
+            # TODO: Call OpenAI embeddings API
+            response = self.openAI_client.embeddings.create(
+                model=self.embedding_model,
+                input=text,
+            )
+            # TODO: Return embedding vector
+            embeddings = [embedding.embedding for embedding in response.data]
+            return embeddings
         # TODO: Add error handling
-        pass
+        except Exception as e:
+            logger.error(f"Error generating embedding for text: {e}")
+            return []
 
     def generate_document_id(self, file_path: Path, metadata: Dict[str, Any]) -> str:
         """
