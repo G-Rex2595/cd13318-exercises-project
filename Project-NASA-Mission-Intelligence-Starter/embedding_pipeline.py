@@ -88,11 +88,17 @@ class ChromaEmbeddingPipelineTextOnly:
             )
         )
         # TODO: Create or get collection
-        self.client.delete_collection(name=self.collection_name)  # For development, reset collection
-        self.collection = self.client.create_collection(
-                    name=self.collection_name,
-                    embedding_function=None,
-                    metadata={"description": self.collection_config["description"]}
+        # self.client.delete_collection(name=self.collection_name)  # For development, reset collection
+        try:
+            collection = self.client.get_collection(name=self.collection_name)  # Ensure collection exists
+            self.collection = collection
+            logger.info(f"Using existing collection: {self.collection_name}")
+        except Exception as e:
+            logger.error(f"Error occurred while fetching collection: {e}")
+            self.collection = self.client.create_collection(
+                        name=self.collection_name,
+                        embedding_function=None,
+                        metadata={"description": self.collection_config["description"]}
                 )
 
     def chunk_text(self, text: str, metadata: Dict[str, Any]) -> List[Tuple[str, Dict[str, Any]]]:
@@ -480,7 +486,8 @@ class ChromaEmbeddingPipelineTextOnly:
             self.collection.add(
                 ids=[doc_id],
                 embeddings=[embedding],
-                metadatas=[document[1]]
+                metadatas=[document[1]],
+                documents=[document[0]]
             )
             stats['added'] += 1
 

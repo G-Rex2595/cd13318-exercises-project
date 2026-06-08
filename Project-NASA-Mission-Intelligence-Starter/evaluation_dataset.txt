@@ -1,0 +1,17 @@
+Question: Where did we land on the moon?
+Answer: The Apollo 11 mission landed on the moon in the Sea of Tranquility. The location of the lunar module's landing site was determined using rendezvous-radar tracking data and confirmed postflight using descent photographic data.
+
+Question: What happened to challenger?
+Answer: The Challenger space shuttle tragically broke apart 73 seconds after liftoff on January 28, 1986, due to the failure of an O-ring seal in its right solid rocket booster. This led to the loss of the spacecraft and the seven crew members on board, including Commander Francis Dick Scobie, Pilot Michael J Smith, Mission Specialist Dr. Judy Resnick, Mission Specialist Ellison Onizuka, Mission Specialist Gregory Jarvis, Mission Specialist Christa McAuliffe, and Payload Specialist Dr. Ronald McNair.
+
+Question: What happened to Apollo 13?
+Answer: During the Apollo 13 mission, an oxygen tank in the service module exploded, causing a critical failure and loss of power in the spacecraft. The crew, consisting of Commander James Lovell, Command Module Pilot John Swigert, and Lunar Module Pilot Fred Haise, had to abort their planned moon landing and work with ground control to safely return to Earth. The mission became known for the phrase "Houston, we've had a problem." The crew successfully navigated the spacecraft back to Earth, and the mission ended with a safe splashdown in the Pacific Ocean.
+
+Question: What were the first words on the moon?
+Answer: The first words spoken by a human on the moon were by astronaut Neil Armstrong, the commander of the Apollo 11 mission. Upon setting foot on the lunar surface on July 20, 1969, Neil Armstrong said, "That's one small step for man, one giant leap for mankind."
+
+Question: Why did the oxygen tank explode on apollo 13?
+Answer: The oxygen tank in the service module of Apollo 13 exploded due to a fault in the tank's electrical system. The explosion was triggered by a damaged wire insulation inside the tank, which caused a short circuit that ignited the Teflon insulation surrounding the wires. This led to a fire and ultimately the catastrophic failure of the oxygen tank during the mission.
+
+Question: Who was on the moon?
+Answer: The first humans to set foot on the moon were astronauts Neil Armstrong and Edwin "Buzz" Aldrin of the Apollo 11 mission on July 20, 1969. Michael Collins, the third crew member, remained in lunar orbit aboard the command module.

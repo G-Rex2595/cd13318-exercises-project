@@ -85,7 +85,7 @@ def display_evaluation_metrics(scores: Dict[str, float]):
     st.sidebar.subheader("📊 Response Quality")
     
     for metric_name, score in scores.items():
-        if isinstance(score, (int, float)):
+        if isinstance(score, (int, float)) and not score != score:  # Check for NaN
             # Color code based on score
             if score >= 0.8:
                 color = "green"
